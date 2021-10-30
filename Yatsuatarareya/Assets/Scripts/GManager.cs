@@ -6,6 +6,10 @@ public class GManager : MonoBehaviour
 {
     //機関銃のプレハブ
     public GameObject MachineGun;
+    //ボールのプレハブ
+    public GameObject Ball;
+    //爆弾のプレハブ
+    public GameObject Bomb;
 
     // Start is called before the first frame update
     void Start()

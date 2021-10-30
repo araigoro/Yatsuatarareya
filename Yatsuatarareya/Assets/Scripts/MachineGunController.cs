@@ -24,11 +24,23 @@ public class MachineGunController : MonoBehaviour
     public GameObject muzzleFlashPrefab;
     private GameObject muzzleFlash;
     //エフェクトの大きさ
-    public Vector3 muzzleFlashScale;
+    private Vector3 muzzleFlashScale = new Vector3(1.3f, 1.3f, 1.3f);
+
+    //銃口の位置
+    private GameObject Muzzle;
 
     //銃声
     public AudioClip[] SE;
     private AudioSource audiosource;
+
+    //銃(MG main)の向きを格納する変数
+    private Vector2 newAngle = new Vector2(0, 0);
+
+    //マウス座標を格納する変数
+    private Vector2 lastMousePosition;
+
+    //回転速度を格納
+    private Vector2 rotationSpped = new Vector2(0.03f, 0.03f);
 
 
     // Start is called before the first frame update
@@ -36,12 +48,37 @@ public class MachineGunController : MonoBehaviour
     {
         //コンポーネント取得
         audiosource = GetComponent<AudioSource>();
+        //銃口オブジェクト（子）取得
+        Muzzle = transform.Find("Muzzle").gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //ボタンが押されている間は発射
         if (shootButton == true) StartCoroutine(ShootTimer());
+
+        //以下銃の向きをドラッグで操作
+        //左クリックした時
+        if (Input.GetMouseButtonDown(0))
+        {
+            //銃の角度を格納
+            newAngle = gameObject.transform.localEulerAngles;
+            //マウス座標を格納
+            lastMousePosition = Input.mousePosition;
+        }
+        //ドラッグしている間
+        else if (Input.GetMouseButton(0))
+        {
+            //Y軸の回転:ドラッグ方向と逆方向に回転
+            newAngle.y -= (Input.mousePosition.x - lastMousePosition.x) * rotationSpped.y;
+            //X軸も同様
+            newAngle.x -= (Input.mousePosition.y - lastMousePosition.y) * rotationSpped.x;
+            //newAngleの角度をオブジェクト(MG main)の角度に代入
+            gameObject.transform.localEulerAngles = newAngle;
+            //マウス座標をlastMousePositionに格納
+            lastMousePosition = Input.mousePosition;
+        }
     }
 
     //弾発射メソッド
@@ -97,8 +134,8 @@ public class MachineGunController : MonoBehaviour
                 }
                 else
                 {
-                    muzzleFlash = Instantiate(muzzleFlashPrefab, transform.position, transform.rotation);
-                    muzzleFlash.transform.SetParent(gameObject.transform);
+                    muzzleFlash = Instantiate(muzzleFlashPrefab, Muzzle.transform.position, Muzzle.transform.rotation);
+                    muzzleFlash.transform.SetParent(Muzzle.transform);
                     //エフェクトの大きさ指定
                     muzzleFlash.transform.localScale = muzzleFlashScale;
                 }
