@@ -42,6 +42,9 @@ public class MachineGunController : MonoBehaviour
     //回転速度を格納
     private Vector2 rotationSpped = new Vector2(0.03f, 0.03f);
 
+    //照準
+    public GameObject Aim;
+
 
     // Start is called before the first frame update
     void Start()

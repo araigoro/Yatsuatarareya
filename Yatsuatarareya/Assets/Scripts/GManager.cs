@@ -4,12 +4,8 @@ using UnityEngine;
 
 public class GManager : MonoBehaviour
 {
-    //機関銃のプレハブ
-    public GameObject MachineGun;
-    //ボールのプレハブ
-    public GameObject Ball;
-    //爆弾のプレハブ
-    public GameObject Bomb;
+    //ボール/爆弾と機関銃の切り替え用
+    public GameObject[] weapon;
 
     // Start is called before the first frame update
     void Start()
